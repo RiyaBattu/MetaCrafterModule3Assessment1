@@ -1,0 +1,50 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SafeBank {
+    uint256 public totalBalance;
+    mapping(address => uint256) private balances;
+
+    // Constructor to initialize the total balance to zero
+    constructor() {
+        totalBalance = 0;
+    }
+
+    // Function to deposit funds into the bank
+    function deposit(uint256 amount) public {
+        require(amount > 0, "Deposit amount must be greater than zero");
+        balances[msg.sender] += amount;
+        totalBalance += amount;
+    }
+
+    // Function to withdraw funds from the bank
+    function withdraw(uint256 amount) public {
+        require(amount <= balances[msg.sender], "Insufficient balance to withdraw");
+        balances[msg.sender] -= amount;
+        totalBalance -= amount;
+    }
+
+    // Function to transfer funds from the caller to another address
+    function transfer(address to, uint256 amount) public {
+        require(to != address(0), "Cannot transfer to the zero address");
+        require(amount <= balances[msg.sender], "Insufficient balance to transfer");
+
+        if (amount > balances[msg.sender]) {
+            revert("Attempt to transfer more than available balance");
+        }
+
+        balances[msg.sender] -= amount;
+        balances[to] += amount;
+    }
+
+    // Function to check the balance of the caller
+    function checkBalance() public view returns (uint256) {
+        return balances[msg.sender];
+    }
+
+    // Function to check the total balance in the bank
+    function checkTotalBalance() public view returns (uint256) {
+        assert(totalBalance >= 0); // Ensuring total balance is never negative
+        return totalBalance;
+    }
+}
