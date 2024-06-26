@@ -70,7 +70,3 @@ If you encounter any issues, consider the following common problems and solution
 
 Contributors names and contact info:
 Riya Battu - riyabattu84955@gmail.com
-
-**License**
-
-This project is licensed under the  License - see the LICENSE.md file for details
